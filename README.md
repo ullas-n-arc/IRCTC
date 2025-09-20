@@ -76,7 +76,7 @@ This project is for educational/demo purposes. Feel free to fork and modify!
 
 ---
 
-**Author:** [Your Name]
+**Author:** Ullas N
 
-If you like this project, give it a ⭐ on GitHub!
+
 
