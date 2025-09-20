@@ -39,7 +39,11 @@ public class UserBookingService{
         Optional<User> foundUser = userList.stream().filter(user1 -> {
             return user1.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
         }).findFirst();
-        return foundUser.isPresent();
+        if (foundUser.isPresent()) {
+            this.user = foundUser.get(); // Set the actual user object
+            return true;
+        }
+        return false;
     }
 
     public Boolean signUp(User user1){
@@ -58,11 +62,10 @@ public class UserBookingService{
     }
 
     public void fetchBookings(){
-        Optional<User> userFetched = userList.stream().filter(user1 -> {
-            return user1.getName().equals(user.getName()) && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
-        }).findFirst();
-        if(userFetched.isPresent()){
-            userFetched.get().printTickets();
+        if (user != null && user.getTicketsBooked() != null && !user.getTicketsBooked().isEmpty()) {
+            user.printTickets();
+        } else {
+            System.out.println("No bookings found for this user.");
         }
     }
 
@@ -106,7 +109,7 @@ public class UserBookingService{
         return train.getSeats();
     }
 
-    public Boolean bookTrainSeat(Train train, int row, int seat) {
+    public Ticket bookTrainSeat(Train train, int row, int seat) {
         try{
             TrainService trainService = new TrainService();
             List<List<Integer>> seats = train.getSeats();
@@ -115,15 +118,24 @@ public class UserBookingService{
                     seats.get(row).set(seat, 1);
                     train.setSeats(seats);
                     trainService.addTrain(train);
-                    return true; // Booking successful
+                    // Create a new Ticket with formatted date
+                    String ticketId = UUID.randomUUID().toString();
+                    String formattedDate = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+                    Ticket ticket = new Ticket(ticketId, user.getUserId(), train.getStations().get(0), train.getStations().get(train.getStations().size()-1), train, formattedDate);
+                    if (user.getTicketsBooked() == null) {
+                        user.setTicketsBooked(new ArrayList<>());
+                    }
+                    user.getTicketsBooked().add(ticket);
+                    saveUserListToFile();
+                    return ticket;
                 } else {
-                    return false; // Seat is already booked
+                    return null; // Seat is already booked
                 }
             } else {
-                return false; // Invalid row or seat index
+                return null; // Invalid row or seat index
             }
         }catch (IOException ex){
-            return Boolean.FALSE;
+            return null;
         }
     }
 }

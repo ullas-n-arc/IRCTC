@@ -16,7 +16,7 @@ public class TrainService {
 
     private List<Train> trainList;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private static final String TRAIN_DB_PATH = "../localDB/trains.json";
+    private static final String TRAIN_DB_PATH = "app/src/main/java/ticket/booking/localDb/trains.json";
 
     public TrainService() throws IOException {
         File trains = new File(TRAIN_DB_PATH);
@@ -69,10 +69,17 @@ public class TrainService {
 
     private boolean validTrain(Train train, String source, String destination) {
         List<String> stationOrder = train.getStations();
-
-        int sourceIndex = stationOrder.indexOf(source.toLowerCase());
-        int destinationIndex = stationOrder.indexOf(destination.toLowerCase());
-
+        // Make matching case-insensitive
+        int sourceIndex = -1;
+        int destinationIndex = -1;
+        for (int i = 0; i < stationOrder.size(); i++) {
+            if (stationOrder.get(i).equalsIgnoreCase(source)) {
+                sourceIndex = i;
+            }
+            if (stationOrder.get(i).equalsIgnoreCase(destination)) {
+                destinationIndex = i;
+            }
+        }
         return sourceIndex != -1 && destinationIndex != -1 && sourceIndex < destinationIndex;
     }
 }

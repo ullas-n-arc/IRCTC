@@ -1,20 +1,19 @@
 package ticket.booking.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.List;
 import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Train {
     private String trainId;
     private String trainNo;
     // we will use 2d lists for train seats
     private List<List<Integer>> seats; // 0 = not booked, 1 = booked
-    private Map<String, String> stationnTimes;
+    private Map<String, String> stationTimes;
     private List<String> stations; // to store which stations the train goes
 
     // Default constructor
@@ -22,18 +21,17 @@ public class Train {
 
     // Parameterized constructor
     public Train(String trainId, String trainNo, List<List<Integer>> seats,
-                 Map<String, String> stationnTimes, List<String> stations) {
+                 Map<String, String> stationTimes, List<String> stations) {
         this.trainId = trainId;
         this.trainNo = trainNo;
         this.seats = seats;
-        this.stationnTimes = stationnTimes;
+        this.stationTimes = stationTimes;
         this.stations = stations;
     }
 
     public String getTrainId() {
         return trainId;
     }
-
 
     public void setTrainId(String trainId) {
         this.trainId = trainId;
@@ -56,11 +54,11 @@ public class Train {
     }
 
     public Map<String, String> getStationTimes() {
-        return stationnTimes;
+        return stationTimes;
     }
 
-    public void setStationnTimes(Map<String, String> stationnTimes) {
-        this.stationnTimes = stationnTimes;
+    public void setStationTimes(Map<String, String> stationTimes) {
+        this.stationTimes = stationTimes;
     }
 
     public List<String> getStations() {
