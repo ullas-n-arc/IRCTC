@@ -34,7 +34,7 @@ app/
 
 1. **Clone the repository**
    ```
-   git clone <your-repo-url>
+   git clone https://github.com/ullas-n-arc/IRCTC
    cd IRCTC
    ```
 2. **Build the project**
